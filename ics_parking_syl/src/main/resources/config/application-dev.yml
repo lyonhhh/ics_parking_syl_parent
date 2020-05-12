@@ -1,0 +1,23 @@
+
+spring:
+#  profile:
+#    include: log-dev
+logging:
+#  path: classpath:config/
+#  config: classpath:logconfig/logback-dev.xml
+  level:
+    cec.ics: debug
+
+cec:
+  rap2:
+    enable: true # 启用rap2文档自动生成
+    server: http://192.168.0.110:3010 # rap2文档生成的server服务
+    username: dengxintao@cestco.cn # rap2的账号
+    password: 885tr2 # rap2的密码
+    repository-id: 79 # rap2中对应的仓库ID，可通过点进仓库内的url参数获得
+    packscan: cec.ics.module # 扫描的包名，注：基于swagger构建，如果自定义了dock，则此配置不会生效
+    include-appname: false # 接口是否将app-name包含进去（适配网关自动转发服务）
+
+#maps: {0: 报警类型,1: 运行状态}
+
+
