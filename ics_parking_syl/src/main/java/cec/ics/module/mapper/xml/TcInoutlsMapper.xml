@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cec.ics.module.mapper.TcInoutlsMapper">
+
+    <select id="pageTcInOut"  resultType="cec.ics.module.entity.response.TcInOutLsResp">
+            select
+            a.Carno as carno,a.CLLX as carType,a.In_time inTime,a.Out_time outTime,a.ReMark as remark,a.P_KEY id
+            ,b.PayType as payType,b.Fact_Cash as factCash
+            from dbo.TC_Inoutls a
+            left join TC_Earning b on a.M_KEY = b.P_KEY
+            <where>
+                <if test="tcInOutLsVo.carno != null and tcInOutLsVo.carno != '' ">
+                    and a.Carno like '%'+#{tcInOutLsVo.carno}+'%'
+                </if>
+                <if test="tcInOutLsVo.inTime != null">
+                    and a.In_time > = #{tcInOutLsVo.inTime,jdbcType=TIMESTAMP}
+                </if>
+                <if test="tcInOutLsVo.outTime != null">
+                    and a.Out_time &lt;= #{tcInOutLsVo.outTime,jdbcType=TIMESTAMP}
+                </if>
+                <if test="tcInOutLsVo.id != null">
+                    and a.P_KEY = #{tcInOutLsVo.id,jdbcType=TIMESTAMP}
+                </if>
+            </where>
+            order by a.In_time desc
+    </select>
+    <select id="listTcEarSum"  resultType="cec.ics.module.entity.parking.CarSumDo">
+        SELECT
+        <choose>
+            <when test="carSumVo.sumType == 'year'">
+                max(datepart(year,Out_time)) as dateTime,
+            </when>
+            <when test="carSumVo.sumType == 'month'">
+                MAX
+                (CONVERT (VARCHAR(4),DatePart( YEAR, Out_time )) + '-' + CONVERT (VARCHAR(4),DatePart( MONTH, Out_time ))) AS dateTime,
+            </when>
+            <otherwise>
+                max(CONVERT(varchar(100), Out_time, 23)) as dateTime,
+            </otherwise>
+        </choose>
+
+        COUNT(In_time) as inCarNum,
+        COUNT(Out_time) as outCarNum,
+        SUM(datediff(HOUR ,In_time,Out_time)) as parkTime,
+        SUM( Fact_Cash ) as sumCase
+        FROM
+        TC_Earning
+        <where>
+            <if test="carSumVo.beginTime != null and carSumVo.endTime != null">
+                and Out_time between #{carSumVo.beginTime} and #{carSumVo.endTime}
+            </if>
+            <if test="carSumVo.time != null">
+               and <choose>
+                    <when test="carSumVo.sumType == 'year'">
+                        datediff( year, Out_time, #{carSumVo.time} ) = 0
+                    </when>
+                    <when test="carSumVo.sumType == 'month'">
+                        datediff( month, Out_time, #{carSumVo.time} ) = 0
+                    </when>
+                    <otherwise>
+                        datediff( day, Out_time, #{carSumVo.time} ) = 0
+                    </otherwise>
+                </choose>
+
+            </if>
+        </where>
+        GROUP BY
+        <choose>
+            <when test="carSumVo.sumType == 'year'">
+                datediff( year, Out_time, GETDATE() )
+            </when>
+            <when test="carSumVo.sumType == 'month'">
+                datediff( month, Out_time, GETDATE() )
+            </when>
+            <otherwise>
+                datediff( day, Out_time, GETDATE() )
+            </otherwise>
+        </choose>
+
+    </select>
+    <select id="countTcIn" resultType="cec.ics.module.entity.CountTcInOut">
+
+        select count(1) num,datepart(hour,In_time) hourNum
+        from  Tc_InOutLs
+                    where datediff( day, In_time, GETDATE() ) = 0
+                    GROUP BY datepart(hour,In_time)
+    </select>
+
+    <select id="countTcOut" resultType="cec.ics.module.entity.CountTcInOut">
+
+        select count(1) num,datepart(hour,Out_time) hourNum
+        from  Tc_InOutLs
+                    where datediff( day, Out_time, GETDATE() ) = 0
+                    GROUP BY datepart(hour,Out_time)
+    </select>
+</mapper>
