@@ -80,25 +80,5 @@ pagehelper:
   supportMethodsArguments: false
   params: count=countSql
 
-#--------------外部系统地址----------------
-#ics-cloud请求地址
-ics.url: http://192.168.4.31:8083
-#布防撤防指令下发请求地址
-ics.orderDown.url: http://192.168.3.248:8192
-#通过设备id获取设备信息
-ics.getPoint.url: http://192.168.4.31:8083
-#获取告警信息
-ics.getAlarm.url: http://192.168.4.31:10000/cec-alarm
-
-#----------------------------------------
-
-#---------------信息点类型id---------------------
-#照明开关信息点id
-lighting.openOrClose.pointInfoTypeId: 52f76846129111ea84c9a4bf015958d5
-
-#----------------其他固定信息--------------------
-#照明开关
-lighting.open: 1
-lighting.close: 0
 
 

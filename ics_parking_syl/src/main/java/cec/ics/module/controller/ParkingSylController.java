@@ -10,6 +10,7 @@ import cec.ics.module.service.ParkService;
 import cec.ics.module.vo.TcInOutLsVo;
 import cec.system.base.basic.controller.BasicController;
 import cec.system.base.mvc.dto.RequestBodyDTO;
+import cec.system.manager.annotation.InterfaceAutoRegister;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,6 +31,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "parking")
 @Api(value = "石杨路停车子系统模块")
+@InterfaceAutoRegister(valid = InterfaceAutoRegister.ValidType.NONE)
 public class ParkingSylController extends BasicController {
 
     @Autowired

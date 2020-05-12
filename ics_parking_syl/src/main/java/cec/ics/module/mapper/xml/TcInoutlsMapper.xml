@@ -2,29 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cec.ics.module.mapper.TcInoutlsMapper">
 
-    <select id="pageTcInOut"  resultType="cec.ics.module.entity.response.TcInOutLsResp">
-            select
-            a.Carno as carno,a.CLLX as carType,a.In_time inTime,a.Out_time outTime,a.ReMark as remark,a.P_KEY id
-            ,b.PayType as payType,b.Fact_Cash as factCash
-            from dbo.TC_Inoutls a
-            left join TC_Earning b on a.M_KEY = b.P_KEY
-            <where>
-                <if test="tcInOutLsVo.carno != null and tcInOutLsVo.carno != '' ">
-                    and a.Carno like '%'+#{tcInOutLsVo.carno}+'%'
-                </if>
-                <if test="tcInOutLsVo.inTime != null">
-                    and a.In_time > = #{tcInOutLsVo.inTime,jdbcType=TIMESTAMP}
-                </if>
-                <if test="tcInOutLsVo.outTime != null">
-                    and a.Out_time &lt;= #{tcInOutLsVo.outTime,jdbcType=TIMESTAMP}
-                </if>
-                <if test="tcInOutLsVo.id != null">
-                    and a.P_KEY = #{tcInOutLsVo.id,jdbcType=TIMESTAMP}
-                </if>
-            </where>
-            order by a.In_time desc
+    <select id="pageTcInOut" resultType="cec.ics.module.entity.response.TcInOutLsResp">
+        select
+        a.Carno as carno,a.CLLX as carType,a.In_time inTime,a.Out_time outTime,a.ReMark as remark,a.P_KEY id
+        ,b.PayType as payType,b.Fact_Cash as factCash
+        from dbo.TC_Inoutls a
+        left join TC_Earning b on a.M_KEY = b.P_KEY
+        <where>
+            <if test="tcInOutLsVo.carno != null and tcInOutLsVo.carno != '' ">
+                and a.Carno like '%'+#{tcInOutLsVo.carno}+'%'
+            </if>
+            <if test="tcInOutLsVo.inTime != null">
+                and a.In_time > = #{tcInOutLsVo.inTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="tcInOutLsVo.outTime != null">
+                and a.Out_time &lt;= #{tcInOutLsVo.outTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="tcInOutLsVo.id != null">
+                and a.P_KEY = #{tcInOutLsVo.id,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+        order by a.In_time desc
     </select>
-    <select id="listTcEarSum"  resultType="cec.ics.module.entity.parking.CarSumDo">
+    <select id="listTcEarSum" resultType="cec.ics.module.entity.parking.CarSumDo">
         SELECT
         <choose>
             <when test="carSumVo.sumType == 'year'">
@@ -32,7 +32,8 @@
             </when>
             <when test="carSumVo.sumType == 'month'">
                 MAX
-                (CONVERT (VARCHAR(4),DatePart( YEAR, Out_time )) + '-' + CONVERT (VARCHAR(4),DatePart( MONTH, Out_time ))) AS dateTime,
+                (CONVERT (VARCHAR(4),DatePart( YEAR, Out_time )) + '-' + CONVERT (VARCHAR(4),DatePart( MONTH, Out_time
+                ))) AS dateTime,
             </when>
             <otherwise>
                 max(CONVERT(varchar(100), Out_time, 23)) as dateTime,
@@ -50,7 +51,8 @@
                 and Out_time between #{carSumVo.beginTime} and #{carSumVo.endTime}
             </if>
             <if test="carSumVo.time != null">
-               and <choose>
+                and
+                <choose>
                     <when test="carSumVo.sumType == 'year'">
                         datediff( year, Out_time, #{carSumVo.time} ) = 0
                     </when>
