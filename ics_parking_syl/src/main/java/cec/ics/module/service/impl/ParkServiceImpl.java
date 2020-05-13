@@ -56,10 +56,12 @@ public class ParkServiceImpl implements ParkService {
      * @return
      */
     @Override
-    public Double getPackingUsed() {
+    public Map<String,Double> getPackingUsed() {
 
         //查询当前车库车辆数量
-        return 0.0;
+        Map<String,Double> map = new HashMap<>(1);
+        map.put("used",0.0);
+        return map;
     }
 
     @Override

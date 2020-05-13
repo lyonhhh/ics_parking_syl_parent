@@ -23,7 +23,7 @@ public interface ParkService {
 
     Map<String,SumData> getSumMap();
 
-    Double getPackingUsed();
+    Map<String,Double> getPackingUsed();
 
     IPage<TcInOutLsResp> inOutList(TcInOutLsVo tcInOutLsVo);
 

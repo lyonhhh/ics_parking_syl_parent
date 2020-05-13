@@ -45,7 +45,7 @@ public class ParkingSylController extends BasicController {
 
     @PostMapping(value = "getPackingUsed")
     @ApiOperation(value = "获取当前车库占用率")
-    public Result<Double> getPackingUsed() {
+    public Result<Map<String,Double>> getPackingUsed() {
         return Result.success(parkService.getPackingUsed());
     }
 
