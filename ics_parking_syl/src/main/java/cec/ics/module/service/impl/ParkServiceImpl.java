@@ -10,9 +10,11 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -81,7 +83,25 @@ public class ParkServiceImpl implements ParkService {
     @Override
     public IPage<CarSumDo> chargeSumList(CarSumVo carSumVo) {
         Page<CarSumDo> tcInOutLsRespPage = new Page<>(carSumVo.getPageNum(), carSumVo.getPageNum());
-        return tcInoutlsMapper.listTcEarSum(tcInOutLsRespPage, carSumVo);
+        IPage<CarSumDo> carSumDoIPage = tcInoutlsMapper.listTcEarSum(tcInOutLsRespPage, carSumVo);
+        List<CarSumDo> records = carSumDoIPage.getRecords();
+        List<CarSumDo> records2 = new ArrayList<>(1);
+        int inNum = tcInoutlsMapper.countTcInOfTime(carSumVo);
+        if(CollectionUtils.isEmpty(records)) {
+            CarSumDo carSumDo = new CarSumDo();
+            carSumDo.setDateTime(null);
+            carSumDo.setSumCase(0.0);
+            carSumDo.setParkTime(0);
+            carSumDo.setInCarNum(inNum);
+            carSumDo.setOutCarNum(0);
+            records2.add(carSumDo);
+            carSumDoIPage.setRecords(records2);
+
+        }else {
+            records.get(0).setInCarNum(inNum);
+            carSumDoIPage.setRecords(records);
+        }
+        return carSumDoIPage;
     }
 
     /**

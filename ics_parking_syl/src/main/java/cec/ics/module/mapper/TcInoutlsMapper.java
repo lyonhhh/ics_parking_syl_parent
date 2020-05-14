@@ -32,4 +32,6 @@ public interface TcInoutlsMapper extends BaseMapper<TcInoutls> {
     List<CountTcInOut> countTcIn();
 
     List<CountTcInOut> countTcOut();
+
+    int countTcInOfTime(CarSumVo carSumVo);
 }

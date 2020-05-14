@@ -95,4 +95,21 @@
                     where datediff( day, Out_time, GETDATE() ) = 0
                     GROUP BY datepart(hour,Out_time)
     </select>
+    <select id="countTcInOfTime" resultType="java.lang.Integer">
+        select count(*)
+        from Tc_InOutLs
+        <where>
+        <choose>
+            <when test="sumType == 'year'">
+                datediff( year, In_time, #{time,jdbcType=TIMESTAMP} ) = 0
+            </when>
+            <when test="sumType == 'month'">
+                datediff( month, In_time, #{time,jdbcType=TIMESTAMP} ) = 0
+            </when>
+            <otherwise>
+                datediff( day, In_time, #{time,jdbcType=TIMESTAMP} ) = 0
+            </otherwise>
+        </choose>
+        </where>
+    </select>
 </mapper>
